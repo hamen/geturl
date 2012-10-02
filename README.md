@@ -13,7 +13,11 @@ Uses [filepicker.io](https://www.filepicker.io) to store the files. It's a cool 
 
 You provide a path, it returns a URL
 
-    geturl path/to/file
+    geturl up path/to/file
+	
+If you want to delete a file
+
+	geturl del file-url
 
 It also tries to use `pbcopy` on a mac, `xsel` or `xclip` on Linux to put the url into your clipboard.
 
