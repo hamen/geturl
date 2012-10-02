@@ -49,24 +49,35 @@ if not APIKEY:
 
 #######################
 # Usage if no right number of args
-if len(sys.argv) != 2:
-    print "usage: geturl <filename>"
+if len(sys.argv) < 2:
+    print "USAGE"
+    print "Upload a file: geturl up <filename>"
+    print "Delete a file: geturl del <fileURL>"
     exit()
 
-#######################
-# Upload the file
-print
-print "Uploading the file to Filepicker.io..."
-output = check_output('curl --progress-bar -F "fileUpload=@%(filename)s" -F "apikey=%(apikey)s" %(fpurl)s/api/path/storage/%(filename)s' %
-        {"filename": sys.argv[1], "apikey": APIKEY, "fpurl": FPURL}, shell=True)
-data = json.loads(output)
-url = data['data'][0]['url']
+if sys.argv[1] == "up":
+    #######################
+    # Upload the file
+    print
+    print "Uploading the file to Filepicker.io..."
+    output = check_output('curl --progress-bar -F "fileUpload=@%(filename)s" -F "apikey=%(apikey)s" %(fpurl)s/api/path/storage/%(filename)s' %
+			  {"filename": sys.argv[2], "apikey": APIKEY, "fpurl": FPURL}, shell=True)
+    data = json.loads(output)
+    url = data['data'][0]['url']
 
-print
-print "A Public Share URL for: %s" % sys.argv[1]
-print url
-print
+    print
+    print "A Public Share URL for: %s" % sys.argv[2]
+    print url
+    print
 
+if sys.argv[1] == "del":
+    #######################
+    # Delete the file
+    print
+    print "Deleting the file from Filepicker.io..."
+    output = check_output('curl --progress-bar -X DELETE --data "key=%(key)s" %(fileurl)s' %
+			  {"fileurl": sys.argv[2], "key": APIKEY }, shell=True)
+    print output
 #######################
 # Copy to the clipboard
 try:
